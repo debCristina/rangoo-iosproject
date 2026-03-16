@@ -28,8 +28,11 @@ class HomeViewModel {
         service.fetchRandomRecipes{ [weak self] result in
             switch result {
             case.success(let response):
-                self?.recipes = response.recipes
+                let safeRecipes = response.recipes.map {$0}
+                self?.recipes = safeRecipes
+//                self?.service.cache.set(response, for: "randomRecipes")
                 self?.createSections()
+
                 completion()
                 print(response.recipes)
 

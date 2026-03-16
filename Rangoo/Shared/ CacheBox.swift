@@ -132,7 +132,7 @@ final class HybridCache<Key: Hashable, Value: Codable> {
     private let diskCache = DiskCache<CachedData<Value>>(folderName: "HybridCache")
     
     //empo de vida do cache, aqui definido como 3600 segundos (1 hora).
-    private let ttl: TimeInterval = 1
+    private let ttl: TimeInterval = 3600
     
     func set(_ value: Value, for key: Key) {
         //encapsula o dado com o timestamp atual.
