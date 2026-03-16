@@ -14,7 +14,6 @@ class HeaderCollectionReusableView: UICollectionReusableView, ViewProtocol {
     
     private lazy var label: UILabel = {
         let label = UILabel()
-//        label.text = "Categoria"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
         label.textColor = .black
@@ -76,6 +75,4 @@ class HeaderCollectionReusableView: UICollectionReusableView, ViewProtocol {
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
-    
-    
 }
