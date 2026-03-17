@@ -254,6 +254,9 @@ doc/
 *.crash
 *.dSYM
 
+# Ignorar arquivo com chave da API
+Config.xcconfig
+
 # ==========================
 # End of file
 # ==========================

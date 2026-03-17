@@ -10,24 +10,31 @@ import UIKit
 
 class RecipeService {
     let baseURL = "https://api.spoonacular.com/recipes"
-    let APIKey = "60e8592d6dd94900aecffc7e323e601d"
     
+    //   Bundle.main significa o bundle principal do app, ou seja, o que está empacotado junto com o app.
+    //O método object(forInfoDictionaryKey:) pega um valor do Info.plist do app usando a chave fornecida.
+    // Converte para String.
+    // Se não existir, usa string vazia.
+    let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String ?? ""
+
     let cache = HybridCache<String, RecipeResponse>()
-    
+    let numberRandomRecipes: Int = 30
     func fetchRandomRecipes(completion: @escaping (Result<RecipeResponse, Error>) -> Void) {
         let cacheKey = "randomRecipes"
 
         // Tenta buscar no cache antes de ir para a API
         if let cachedData = cache.get(for: cacheKey) {
             completion(.success(cachedData))
+
             return
         }
         // Se não tiver no cache monta a url
-        let path = "/random?apiKey=\(APIKey)&number=30"
+        let path = "/random?apiKey=\(apiKey)&number=\(numberRandomRecipes)"
         guard let url = URL(string: baseURL + path) else {
             completion(.failure(NSError(domain: "InvalidURL", code: 0)))
             return
         }
+        
         let session = URLSession.shared
 
         // Armazenar a sessão da request e retorna a dado da corpo da requisição, o responde que é o objeto e o erro
@@ -47,8 +54,6 @@ class RecipeService {
                 }
             }
         }
-        
         task.resume()
     }
 }
-

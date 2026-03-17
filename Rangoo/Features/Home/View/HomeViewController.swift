@@ -8,7 +8,6 @@
 import UIKit
 
 class HomeViewController: UIViewController {
-    let service = RecipeService()
     private let homeView = HomeView()
     private let viewModel = HomeViewModel()
     
@@ -17,6 +16,10 @@ class HomeViewController: UIViewController {
    
     override func loadView() {
         view = homeView
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     override func viewDidLoad() {
@@ -81,8 +84,8 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderCollectionReusableView.identifier, for: indexPath) as! HeaderCollectionReusableView
         
-        let sectionKind = SectionKind(rawValue: indexPath.section)
-        header.configure(title: sectionKind?.sectionTitle ?? "")
+        let sectionKind = viewModel.sections[indexPath.section].section
+        header.configure(title: sectionKind.sectionTitle)
         return header
     }
 }
