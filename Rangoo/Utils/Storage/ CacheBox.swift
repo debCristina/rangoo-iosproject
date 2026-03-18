@@ -47,7 +47,7 @@ final class MemoryCache<Key: Hashable, Value> {
     //Remove um item específico do cache de memória.
     // Mantém o cache limpo, evita que dados antigos fiquem ocupando memória.
     func remove(for key: Key) {
-        cache.object(forKey: WrappedKey(key))
+        cache.removeObject(forKey: WrappedKey(key))
     }
 }
 
@@ -132,7 +132,7 @@ final class HybridCache<Key: Hashable, Value: Codable> {
     private let diskCache = DiskCache<CachedData<Value>>(folderName: "HybridCache")
     
     //empo de vida do cache, aqui definido como 3600 segundos (1 hora).
-    private let ttl: TimeInterval = 1
+    private let ttl: TimeInterval = 3600
     
     func set(_ value: Value, for key: Key) {
         //encapsula o dado com o timestamp atual.
@@ -156,6 +156,7 @@ final class HybridCache<Key: Hashable, Value: Codable> {
             memoryCache.set(cached, for: key)
             return cached.data
         }
+        
         return nil
     }
 }

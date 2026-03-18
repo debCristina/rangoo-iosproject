@@ -19,17 +19,18 @@ class RemoteImageView: UIImageView {
     //Recebe a URL da imagem.
     func load(url: URL) {
         
+        
         //Guarda a url atual , se a célula for reutilizada depois, esse valor muda.
         currentURL = url
         //Criação de uma thread em background porque baixar imagem da internet pode ser lento
         
-//        let key = url.absoluteString as NSString
-//
-//        // Verifica cache
-//        if let cachedImage = ImageCache.shared.object(forKey: key) {
-//            self.image = cachedImage
-//            return
-//        }
+        let key = url.absoluteString as NSString
+
+        // Verifica cache
+        if let cachedImage = ImageCache.shared.object(forKey: key) {
+            self.image = cachedImage
+            return
+        }
         
         DispatchQueue.global().async { [weak self] in
             
@@ -38,7 +39,7 @@ class RemoteImageView: UIImageView {
                //Agora o iOS converte os bytes da imagem em um objeto que o UIKit consegue mostrar.
                let image = UIImage(data: data) {
                 
-//                ImageCache.shared.setObject(image, forKey: key)
+                ImageCache.shared.setObject(image, forKey: key)
 
                 
                 // Volta para a thread principalpara atualizar a ui

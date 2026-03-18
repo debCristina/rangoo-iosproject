@@ -8,15 +8,26 @@
 import UIKit
 
 class HomeViewController: UIViewController {
-    let service = RecipeService()
+    private let viewModel:  HomeViewModel
     private let homeView = HomeView()
-    private let viewModel = HomeViewModel()
     
     private let searchView = SearchController()
     
-   
+    init(viewModel: HomeViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func loadView() {
         view = homeView
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     override func viewDidLoad() {
@@ -25,7 +36,7 @@ class HomeViewController: UIViewController {
         homeView.recipeCategoryView.recipesCollectionView.dataSource = self
         homeView.recipeCategoryView.recipesCollectionView.delegate = self
         fetchRecipes()
-   }
+    }
     
     private func setupNavigation() {
         title = "Recipes"
@@ -81,9 +92,8 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderCollectionReusableView.identifier, for: indexPath) as! HeaderCollectionReusableView
         
-        let sectionKind = SectionKind(rawValue: indexPath.section)
-        header.configure(title: sectionKind?.sectionTitle ?? "")
+        let sectionKind = viewModel.sections[indexPath.section].section
+        header.configure(title: sectionKind.sectionTitle)
         return header
     }
 }
-

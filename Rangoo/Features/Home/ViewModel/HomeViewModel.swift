@@ -20,7 +20,7 @@ class HomeViewModel {
     // Inicializando a view mode, com a classe de serviço
     init(recipeService: RecipeService = RecipeService()) {
         self.service = recipeService
-        
+    
     }
     
     // Buscando receitas utilizando o método da service
@@ -31,8 +31,7 @@ class HomeViewModel {
                 self?.recipes = response.recipes
                 self?.createSections()
                 completion()
-                print(response.recipes)
-
+               
 
             case.failure(let error):
                 print("Error fetching recipes: \(error)")
@@ -42,7 +41,8 @@ class HomeViewModel {
     
     // organizar as receitas por categoria
     func createSections() {
-        
+        sections.removeAll()
+
         // Retorna todas as categorias
         sections = SectionKind.allCases.compactMap { kind in
             // pega todas as categorias
@@ -106,7 +106,5 @@ class HomeViewModel {
                 $0.dishTypes?.contains("appetizer") == true
             }
         }
-        
     }
-
 }

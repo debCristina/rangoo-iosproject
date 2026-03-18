@@ -22,22 +22,17 @@ class HomeCoordinator: Coordinator {
     
     func start() {
         // Cria a ViewModel
-//        let viewModel = HomeViewModel()
+        let viewModel = HomeViewModel()
         
         // Cria o ViewController e injeta a ViewModel
-       let homeVC = HomeViewController()
+       let homeVC = HomeViewController(viewModel: viewModel)
         
         // Adiciona o ViewController à NavigationController
         navigationController.viewControllers = [homeVC]
         
         // Configura o TabBarItem usando o enum TabItem
-        setTabItemStyle()
+        navigationController.tabBarItem = tabItem.makeTabBarItem()
     }
     
-    // Esssa função é utilizada para criar o item da tabbar e seus estilos de acordo com o valor vindo do enum de estilo
-    private func setTabItemStyle() {
-        let style = tabItem.style
-        navigationController.tabBarItem = UITabBarItem(title: style.title, image: style.icon, selectedImage: style.selectedIcon)
-    }
     
 }
