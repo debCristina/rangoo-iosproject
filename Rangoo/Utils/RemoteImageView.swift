@@ -25,8 +25,8 @@ class RemoteImageView: UIImageView {
         //Criação de uma thread em background porque baixar imagem da internet pode ser lento
         
         let key = url.absoluteString as NSString
-//
-//        // Verifica cache
+
+        // Verifica cache
         if let cachedImage = ImageCache.shared.object(forKey: key) {
             self.image = cachedImage
             return

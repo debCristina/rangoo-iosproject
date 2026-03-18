@@ -8,33 +8,6 @@
 import Foundation
 import UIKit
 
-enum SectionKind: Int, CaseIterable {
-    case lunch
-    case dinner
-    case mainDish
-    case breakFast
-    case salads
-    case soups
-    case sideDishes
-    case snack
-    case dessert
-    case appetizer
-    
-    var sectionTitle: String {
-        switch self {
-        case .lunch: return "Lunch"
-        case .dinner: return "Dinner"
-        case .mainDish: return "Main dish"
-        case .breakFast: return "Breakfast"
-        case .salads: return "Salads"
-        case .soups: return "Soups"
-        case .sideDishes: return "Side dish"
-        case .snack: return "Snack"
-        case .dessert: return "Dessert"
-        case .appetizer: return "Appetizer"
-        }
-    }
-}
 
 class RecipesCategoryCollectionView: UIView, ViewProtocol {
     
@@ -95,6 +68,7 @@ class RecipesCategoryCollectionView: UIView, ViewProtocol {
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(1.0)
             )
+            
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             
             // GROUP (mesmo tamanho da célula + spacing)
@@ -111,12 +85,12 @@ class RecipesCategoryCollectionView: UIView, ViewProtocol {
             // SECTION
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = .continuous
-            section.interGroupSpacing = 30
+            section.interGroupSpacing = CGFloat(Int.sectionSpacingInter)
             section.contentInsets = NSDirectionalEdgeInsets(
                 top: 0,
-                leading: 16,
+                leading: CGFloat(Int.sectionSpacingLeading),
                 bottom: 0,
-                trailing: 16
+                trailing: CGFloat(Int.sectionSpacingTrailing)
             )
             
             // Header

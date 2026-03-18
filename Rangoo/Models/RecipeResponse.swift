@@ -21,7 +21,4 @@ struct Recipe: Codable {
     let dishTypes: [String]?
 }
 
-struct RecipeSection {
-    let section: SectionKind
-    let recipes: [Recipe]
-}
+

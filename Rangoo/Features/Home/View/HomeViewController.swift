@@ -8,12 +8,20 @@
 import UIKit
 
 class HomeViewController: UIViewController {
+    private let viewModel:  HomeViewModel
     private let homeView = HomeView()
-    private let viewModel = HomeViewModel()
     
     private let searchView = SearchController()
     
-   
+    init(viewModel: HomeViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func loadView() {
         view = homeView
     }
@@ -28,7 +36,7 @@ class HomeViewController: UIViewController {
         homeView.recipeCategoryView.recipesCollectionView.dataSource = self
         homeView.recipeCategoryView.recipesCollectionView.delegate = self
         fetchRecipes()
-   }
+    }
     
     private func setupNavigation() {
         title = "Recipes"
@@ -89,4 +97,3 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         return header
     }
 }
-

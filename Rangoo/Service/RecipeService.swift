@@ -21,7 +21,6 @@ class RecipeService {
     let numberRandomRecipes: Int = 30
     func fetchRandomRecipes(completion: @escaping (Result<RecipeResponse, Error>) -> Void) {
         let cacheKey = "randomRecipes"
-
         // Tenta buscar no cache antes de ir para a API
         if let cachedData = cache.get(for: cacheKey) {
             completion(.success(cachedData))
@@ -46,6 +45,7 @@ class RecipeService {
             
             DispatchQueue.main.async {
                 do {
+                    print(String(data: data, encoding: .utf8)!)
                     let recipes = try JSONDecoder().decode(RecipeResponse.self, from: data)
                     self.cache.set(recipes, for: cacheKey)
                     completion(.success(recipes))
