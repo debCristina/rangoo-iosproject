@@ -8,17 +8,17 @@
 import Foundation
 import UIKit
 
-// Subclasse de UIImageView
+// MARK: - Subclasse de UIImageView
 // Herda tudo que um UIImageView faz, mas agora tem uma função extra para carregar imagens da internet.
 class RemoteImageView: UIImageView {
     
+    // MARK: - Definicao de variaveis
     //Guarda qual imagem essa view deveria estar mostrando.
     private var currentURL: URL?
     
     
-    //Recebe a URL da imagem.
+    // MARK: - funcao que recebe a URL da imagem.
     func load(url: URL) {
-        
         
         //Guarda a url atual , se a célula for reutilizada depois, esse valor muda.
         currentURL = url
