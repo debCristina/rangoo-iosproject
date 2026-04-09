@@ -12,4 +12,6 @@ extension UIColor {
     static let primaryColor = UIColor(named: "AccentColor")
 //    static let contrastColor = UIColor(named: "contrastColor")
     static let graySoft = UIColor(named: "softGray")
+    static let fontColor = UIColor.black
+
 }

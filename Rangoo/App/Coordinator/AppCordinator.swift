@@ -30,7 +30,7 @@ class AppCordinator: Coordinator {
     }
     
     func start() {
-        let homeCoordinator = HomeCoordinator(tabItem: .home)
+        let homeCoordinator = RecipeCoordinator(tabItem: .home)
         homeCoordinator.start()
 
         let listCoordinator = ListCoordinator(tabItem: .list)

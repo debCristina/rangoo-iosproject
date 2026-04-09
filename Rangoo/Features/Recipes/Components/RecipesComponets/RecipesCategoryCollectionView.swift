@@ -7,9 +7,11 @@
 
 import Foundation
 import UIKit
+import Combine
 
-
-class RecipesCategoryCollectionView: UIView, ViewProtocol {
+// MARK: - Classe responsável por configurar a Collection View
+class RecipesCategoryCollectionView: UIView, ViewProtocol{
+    // MARK: - Configuração de variáveis
     
     // Criando um objeto do tipo UICollectionView
     var recipesCollectionView: UICollectionView = {
@@ -32,24 +34,28 @@ class RecipesCategoryCollectionView: UIView, ViewProtocol {
         return collectionView
     }()
     
+    // MARK: - Função de inicialização
     override init(frame: CGRect) {
         super.init(frame: .zero)
+        // Chama a função de configuração da view
         setupView()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // Funcao de seta os componentes
+    // MARK: - Função de setar os componentes
     func setupView() {
         setHierarchy()
         setConstraints()
     }
     
+    // MARK: - Função de organizar os elementos por hierarquia
     func setHierarchy() {
         addSubview(recipesCollectionView)
     }
     
+    // MARK: - Função de configurar constraints
     func setConstraints() {
         NSLayoutConstraint.activate([
             recipesCollectionView.topAnchor.constraint(equalTo: topAnchor),

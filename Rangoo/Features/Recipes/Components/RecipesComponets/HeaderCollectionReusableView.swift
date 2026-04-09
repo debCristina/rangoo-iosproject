@@ -6,12 +6,17 @@
 //
 
 import UIKit
+import Combine
 
 class HeaderCollectionReusableView: UICollectionReusableView, ViewProtocol {
-    
-    
     static let identifier = "HeaderCollectionReusableView"
     
+    //Um canal que emite eventos sem dados e nunca dá erro
+    let buttonTapped = PassthroughSubject<Void, Never>()
+    
+    // Closure para comunicar o toque no botao
+    var onButtonTapped: (() -> Void)?
+
     private lazy var label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -34,7 +39,12 @@ class HeaderCollectionReusableView: UICollectionReusableView, ViewProtocol {
     } ()
     
     @objc private func didTapButton() {
-        print("Botão clicado")
+        onButtonTapped?()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        onButtonTapped = nil
     }
     
     override init(frame: CGRect) {
@@ -48,18 +58,21 @@ class HeaderCollectionReusableView: UICollectionReusableView, ViewProtocol {
     
     func configure(title: String) {
         label.text = title
-
     }
-
+    
+    // MARK: - Setup View
     func setupView() {
         setHierarchy()
         setConstraints()
     }
     
+    // MARK: - Set Hierarchy
+    // Adiciona as views em ordem de hierarquia
     func setHierarchy() {
         addSubview(label)
         addSubview(button)
     }
+    
     
     func setConstraints() {
         NSLayoutConstraint.activate([

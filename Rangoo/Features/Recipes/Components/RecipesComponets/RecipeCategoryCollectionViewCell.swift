@@ -35,8 +35,7 @@ class RecipeCategoryCollectionViewCell: UICollectionViewCell, ViewProtocol {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.customFont(type: .regular, size: 11)
         label.textAlignment = .center
-        label.textColor = .black
-
+        label.textColor = UIColor.fontColor
         return label
     }()
     
