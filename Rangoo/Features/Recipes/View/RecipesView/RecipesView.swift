@@ -8,10 +8,12 @@ import Foundation
 import UIKit
 
 // Classe de componentes da Home
-class HomeView: UIView, ViewProtocol {
+class RecipesView: UIView, ViewProtocol {
+    // MARK: - Configuração das variáveis
     // Coleção de receitas
     let recipeCategoryView = RecipesCategoryCollectionView()
-    
+
+    // MARK: - Função de inicialização
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -21,19 +23,19 @@ class HomeView: UIView, ViewProtocol {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // Função de configurar a view com hieraquia e constraints( ViewProtocol )
+    // MARK: - Função de configurar a view com hieraquia e constraints( ViewProtocol )
     func setupView() {
         self.backgroundColor = UIColor.white
         setHierarchy()
         setConstraints()
     }
     
-    // Hierarquia de views
+    // MARK: - Hierarquia de views
     func setHierarchy() {
         addSubview(recipeCategoryView)
     }
     
-    // Constraints definidas
+    // MARK: - Constraints definidas
     func setConstraints() {
         recipeCategoryView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

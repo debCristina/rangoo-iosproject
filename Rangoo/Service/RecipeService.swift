@@ -18,26 +18,28 @@ class RecipeService {
     let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String ?? ""
 
     let cache = HybridCache<String, RecipeResponse>()
-    let numberRandomRecipes: Int = 30
-    func fetchRandomRecipes(completion: @escaping (Result<RecipeResponse, Error>) -> Void) {
-        let cacheKey = "randomRecipes"
-        // Tenta buscar no cache antes de ir para a API
+    
+
+    func fetchRecipesByType(type: SectionKind, completion: @escaping (Result<[Recipe], Error>) -> Void) {
+        let cacheKey = "recipes_\(type)"
+        
         if let cachedData = cache.get(for: cacheKey) {
-            completion(.success(cachedData))
+            // Cache precisa ser do tipo correto
+            completion(.success(cachedData.recipes))
+            print(cachedData.recipes)
 
             return
         }
-        // Se não tiver no cache monta a url
-        let path = "/random?apiKey=\(apiKey)&number=\(numberRandomRecipes)"
+        
+        // addRecipeInformation=true garante que dishTypes venha preenchido
+        let path = "/complexSearch?apiKey=\(apiKey)&type=\(type.rawQueryValue)&number=50&addRecipeInformation=true&addRecipeInstructions=true"
+
         guard let url = URL(string: baseURL + path) else {
             completion(.failure(NSError(domain: "InvalidURL", code: 0)))
             return
         }
         
-        let session = URLSession.shared
-
-        // Armazenar a sessão da request e retorna a dado da corpo da requisição, o responde que é o objeto e o erro
-        let task = session.dataTask(with: url) { data, response , error in
+        URLSession.shared.dataTask(with: url) { data, _, error in
             guard let data = data else {
                 completion(.failure(NSError(domain: "NoData", code: 1)))
                 return
@@ -45,15 +47,16 @@ class RecipeService {
             
             DispatchQueue.main.async {
                 do {
-                    print(String(data: data, encoding: .utf8)!)
-                    let recipes = try JSONDecoder().decode(RecipeResponse.self, from: data)
-                    self.cache.set(recipes, for: cacheKey)
-                    completion(.success(recipes))
+                    // Usa o ComplexSearchResponse correto
+                    let response = try JSONDecoder().decode(ComplexSearchResponse.self, from: data)
+                    print(response)
+                    self.cache.set(RecipeResponse(recipes: response.results), for: cacheKey)
+                    completion(.success(response.results))
+                    
                 } catch {
                     completion(.failure(error))
                 }
             }
-        }
-        task.resume()
+        }.resume()
     }
 }

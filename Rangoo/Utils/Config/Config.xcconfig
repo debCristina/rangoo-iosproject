@@ -8,5 +8,6 @@
 // Configuration settings file format documentation can be found at:
 // https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
 
-API_KEY = 60e8592d6dd94900aecffc7e323e601d
+API_KEY = 116075d063014c63b5309744ad36e69c
+
 
