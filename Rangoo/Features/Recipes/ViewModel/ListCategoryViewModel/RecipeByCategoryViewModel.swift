@@ -15,10 +15,16 @@ class RecipeByCategoryViewModel {
     // Já chega populado, sem precisar de nova requisição
     let recipes: [Recipe]
     
+    weak var coordinator: RecipeCoordinatorProtocol?
     
     // MARK: - Incia a view model
     init(category: SectionKind, recipes: [Recipe]) {
         self.category = category
         self.recipes = recipes
     }
+    
+    func goToRecipeDetail() {
+        coordinator?.navigateToRecipeDetail()
+    }
+
 }

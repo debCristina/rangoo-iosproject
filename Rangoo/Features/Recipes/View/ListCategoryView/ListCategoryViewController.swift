@@ -36,6 +36,7 @@ class ListCategoryViewController: UIViewController {
         view = recipeCategoryView
         // Define a propria view controller como data source
         recipeCategoryView.recipeCategoryTableView.dataSource = self
+        recipeCategoryView.recipeCategoryTableView.delegate = self
         // Recebe o nome para ser exibido na pagina
         title = viewModel.category.sectionTitle
     }
@@ -64,3 +65,14 @@ extension ListCategoryViewController: UITableViewDataSource {
         return cell
     }
 }
+
+extension ListCategoryViewController: UITableViewDelegate {
+    // MARK: - Detecta clique na celula
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let recipe = viewModel.recipes[indexPath.row]
+        
+        // Chama o coordinator para navegar
+        viewModel.goToRecipeDetail()
+    }
+}
+

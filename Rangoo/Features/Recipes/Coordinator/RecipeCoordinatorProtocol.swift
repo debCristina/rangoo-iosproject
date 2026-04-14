@@ -12,5 +12,7 @@ protocol RecipeCoordinatorProtocol: AnyObject {
     
     // Método de navegar para a próxima tela com a categoria e com a lista de receitas
     func navigateToRecipeList(category: SectionKind, recipes: [Recipe])
+    
+    func navigateToRecipeDetail() 
 
 }

@@ -50,7 +50,6 @@ class ListCategoryViewCell: UITableViewCell, ViewProtocol {
     private lazy var recipeTime: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "45 min"
         label.textColor = UIColor.fontColor
         label.font = UIFont.customFont(type: .regular, size: 12)
         return label

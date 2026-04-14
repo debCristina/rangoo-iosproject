@@ -58,8 +58,17 @@ class RecipeCoordinator: Coordinator, RecipeCoordinatorProtocol {
         let listViewModel = RecipeByCategoryViewModel(category: category, recipes: recipes)
         
         let listVC = ListCategoryViewController(viewModel: listViewModel)
+        
+        listViewModel.coordinator = self
 
         // Chama a proxima tela
         navigationController.pushViewController(listVC, animated: false)
+    }
+    
+    func navigateToRecipeDetail() {
+        let detailVC = RecipeDetailViewController()
+        navigationController.pushViewController(detailVC, animated: false)
+
+
     }
 }
