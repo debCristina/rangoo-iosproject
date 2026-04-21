@@ -40,6 +40,7 @@ class ListCategoryViewController: UIViewController {
         // Recebe o nome para ser exibido na pagina
         title = viewModel.category.sectionTitle
     }
+    
 }
 
 // MARK: - Data source responsavel por configurar as informacoes da table view

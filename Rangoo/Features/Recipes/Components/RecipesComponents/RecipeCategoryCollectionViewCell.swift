@@ -22,6 +22,8 @@ class RecipeCategoryCollectionViewCell: UICollectionViewCell, ViewProtocol {
         stackView.axis = .vertical
         stackView.spacing = 5
         stackView.alignment = .fill
+        stackView.distribution = .fill
+
         return stackView
     }()
     

@@ -16,7 +16,7 @@ class RecipesViewController: UIViewController {
     private let recipeView = RecipesView()
     
     // View Model responsável por transmitir os dados
-    private let viewModel:  RecipesViewModel
+     private let viewModel:  RecipesViewModel
 
     // Barra de pesquisa
     private let searchView = SearchController()
@@ -53,6 +53,8 @@ class RecipesViewController: UIViewController {
         
         // Define o data source da collection view como a própria view controller
         recipeView.recipeCategoryView.recipesCollectionView.dataSource = self
+        
+        recipeView.recipeCategoryView.recipesCollectionView.delegate = self
 //        homeView.recipeCategoryView.recipesCollectionView.delegate = self
         
         // Bind com a view model
@@ -147,4 +149,12 @@ extension RecipesViewController: UICollectionViewDataSource {
     }
 }
 
-
+extension RecipesViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let recipe = viewModel.sections[indexPath.section].recipes[indexPath.item]
+        
+        viewModel.goToRecipeDetail()
+    }
+}
