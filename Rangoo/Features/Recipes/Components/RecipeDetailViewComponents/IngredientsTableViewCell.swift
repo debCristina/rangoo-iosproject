@@ -14,17 +14,16 @@ class IngredientsTableViewCell: UITableViewCell, ViewProtocol {
     private lazy var ingedientTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Alho"
         label.textColor = UIColor.black
         label.font = UIFont.customFont(type: .regular, size: 14)
-        label.numberOfLines = 1
+        label.numberOfLines = 0
+
         return label
     }()
     
     private lazy var ingredientQuantity: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "max 25°C"
         label.font = UIFont.customFont(type: .regular, size: 14)
         label.numberOfLines = 1
         return label
@@ -60,6 +59,12 @@ class IngredientsTableViewCell: UITableViewCell, ViewProtocol {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
+    
+    func configure(name: String, quantity: String) {
+        ingedientTitle.text = name
+        ingredientQuantity.text = quantity
+    }
+    
     
     func setupView() {
         selectionStyle = .none

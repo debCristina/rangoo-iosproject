@@ -155,6 +155,6 @@ extension RecipesViewController: UICollectionViewDelegate {
         
         let recipe = viewModel.sections[indexPath.section].recipes[indexPath.item]
         
-        viewModel.goToRecipeDetail()
+        viewModel.goToRecipeDetail(recipe: recipe)
     }
 }

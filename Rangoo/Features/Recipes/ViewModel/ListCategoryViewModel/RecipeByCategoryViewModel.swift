@@ -23,8 +23,8 @@ class RecipeByCategoryViewModel {
         self.recipes = recipes
     }
     
-    func goToRecipeDetail() {
-        coordinator?.navigateToRecipeDetail()
+    func goToRecipeDetail(recipe: Recipe) {
+        coordinator?.navigateToRecipeDetail(recipe: recipe)
     }
 
 }

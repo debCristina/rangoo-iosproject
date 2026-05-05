@@ -20,12 +20,14 @@ class ListCoordinator: Coordinator {
         self.tabItem = tabItem
     }
     
+    
     func start() {
         // Cria a ViewModel
         // let viewModel = HomeViewModel()
-        
+        let viewModel = GroceryListViewModel()
+
         // Cria o ViewController e injeta a ViewModel
-        let homeVC = ListViewController()
+        let homeVC = ListViewController(viewModel: viewModel)
         
         // Adiciona o ViewController à NavigationController
         navigationController.viewControllers = [homeVC]

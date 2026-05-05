@@ -7,6 +7,8 @@
 
 import Foundation
 
+import Foundation
+
 class RecipeDetailViewModel {
     
     enum State {
@@ -14,5 +16,10 @@ class RecipeDetailViewModel {
         case instructions
     }
     
+    let recipe: Recipe
     var state: State = .ingredients
+    
+    init(recipe: Recipe) {
+        self.recipe = recipe
+    }
 }

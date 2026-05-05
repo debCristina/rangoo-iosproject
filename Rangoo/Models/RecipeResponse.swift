@@ -22,10 +22,12 @@ struct Recipe: Codable {
     let dishTypes: [String]?
     let readyInMinutes: Int?
     let summary: String?
+    let extendedIngredients: [Ingredient]?
+    let analyzedInstructions: [Instruction]?
     
     // MARK: - mapear os nomes das chaves do JSON para as propriedades.
     enum CodingKeys: String, CodingKey {
-        case id, title, image, dishTypes, readyInMinutes, summary
+        case id, title, image, dishTypes, readyInMinutes, summary, extendedIngredients, analyzedInstructions
     }
     
     // MARK: - Controle total de como os dados são lidos.
@@ -39,21 +41,61 @@ struct Recipe: Codable {
         image = try container.decode(String.self, forKey: .image)
         dishTypes = try? container.decode([String].self, forKey: .dishTypes)
         summary = try? container.decode(String.self, forKey: .summary)
+        extendedIngredients = try container.decodeIfPresent([Ingredient].self, forKey: .extendedIngredients)
+
+        analyzedInstructions = try container.decodeIfPresent([Instruction].self, forKey: .analyzedInstructions)
         
+
         // tolerante a Int ou String
         // Tenta ler como Int
         if let intValue = try? container.decode(Int.self, forKey: .readyInMinutes) {
             readyInMinutes = intValue
-        // Se falhar tenta ler como String
-        // Se for string, tenta converter para Int
+            // Se falhar tenta ler como String
+            // Se for string, tenta converter para Int
         } else if let stringValue = try? container.decode(String.self, forKey: .readyInMinutes),
                   let intValue = Int(stringValue) {
             readyInMinutes = intValue
-        // Se tudo falhar retorna nil
+            // Se tudo falhar retorna nil
         } else {
             readyInMinutes = nil
         }
     }
 }
 
+struct Ingredient: Codable {
+    let id: Int?
+    let name: String
+    let amount: Double?
+    let unit: String?
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // Campos obrigatórios
+        name = try container.decode(String.self, forKey: .name)
+        
+        // Campos opcionais simples
+        id            = try container.decodeIfPresent(Int.self, forKey: .id)
+        unit          = try container.decodeIfPresent(String.self, forKey: .unit)
 
+        
+        // amount pode vir como Int ou Double
+        if let d = try? container.decode(Double.self, forKey: .amount) {
+            amount = d
+        } else if let i = try? container.decode(Int.self, forKey: .amount) {
+            amount = Double(i)
+        } else {
+            amount = nil
+        }
+    }
+}
+
+struct RecipeStep: Codable {
+    let number: Int
+    let step: String
+}
+
+struct Instruction: Codable {
+    let name: String?
+    let steps: [RecipeStep]
+}

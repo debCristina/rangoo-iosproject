@@ -12,9 +12,8 @@ class RecipeHeaderView: UIView, ViewProtocol {
     var didTapSegmented: ((Int) -> Void)?
     
     // MARK: - Imagem da receita
-    private lazy var recipeImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "recipeImage")
+    private lazy var recipeImage: RemoteImageView = {
+        let imageView = RemoteImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
@@ -25,7 +24,6 @@ class RecipeHeaderView: UIView, ViewProtocol {
     private lazy var recipeName: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Strgonoff de Frango"
         label.textColor = UIColor.fontColor
         label.font = UIFont.customFont(type: .bold, size: 20)
         label.numberOfLines = 1
@@ -37,11 +35,25 @@ class RecipeHeaderView: UIView, ViewProtocol {
     private lazy var recipeTime: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "45 min"
         label.textColor = UIColor.fontColor
         label.font = UIFont.customFont(type: .regular, size: 14)
         return label
     }()
+    
+    private lazy var sectionTitle: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor.black
+        label.font = UIFont.customFont(type: .bold, size: 18)
+        label.numberOfLines = 1
+
+        return label
+        
+    }()
+    
+    func updateTitle(for index: Int) {
+        sectionTitle.text = index == 0 ? "Ingredientes" : "Instruções"
+    }
     
     // MARK: - variavel de controle de estado
     private lazy var segmentedControl: UISegmentedControl = {
@@ -120,7 +132,34 @@ class RecipeHeaderView: UIView, ViewProtocol {
         addSubview(recipeImage)
         addSubview(segmentedControl)
         addSubview(stackViewHorizontal)
+        addSubview(sectionTitle)
     }
+    
+    
+    
+    func configure(with recipe: Recipe) {
+        
+        // Configurao nome
+        recipeName.text = recipe.title
+        
+        // Configura o tempo
+        if let time = recipe.readyInMinutes {
+            // Padroniza a exibicao do tempo
+            recipeTime.text = "\(time) min"
+        } else {
+            // Se nenhum valor for encontrado o texto será -
+            recipeTime.text = "-"
+        }
+        
+       
+        
+        // Carrefa a imagem
+        if let url = URL(string: recipe.image) {
+            recipeImage.load(url: url)
+        }
+    }
+    
+    
     
     func setConstraints() {
         // MARK: - Recipe image
@@ -143,7 +182,14 @@ class RecipeHeaderView: UIView, ViewProtocol {
             segmentedControl.topAnchor.constraint(equalTo: stackViewHorizontal.bottomAnchor, constant: 16),
             segmentedControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             segmentedControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            segmentedControl.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16) 
+        ])
+        
+        NSLayoutConstraint.activate([
+            sectionTitle.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 20),
+            sectionTitle.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            sectionTitle.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            sectionTitle.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            sectionTitle.heightAnchor.constraint(greaterThanOrEqualToConstant: 18)
         ])
     }
 }

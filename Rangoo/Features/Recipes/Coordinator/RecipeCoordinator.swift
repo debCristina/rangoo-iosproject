@@ -10,6 +10,8 @@ import UIKit
 
 // MARK: - Recipe Coordinator: Responsável pelos fluxos de receita
 class RecipeCoordinator: Coordinator, RecipeCoordinatorProtocol {
+    
+    
     // MARK: - Coniguração de variáveis
     // Configuracao da tab item
     private let tabItem: TabItem
@@ -40,7 +42,7 @@ class RecipeCoordinator: Coordinator, RecipeCoordinatorProtocol {
     // MARK: - Função de navegar para a tela de receita
     func navigateToRecipes() {
         // cria o serviço
-        let service = RecipeService()
+        let service = RecipeService.shared
         
         // Cria a ViewModel
         let viewModel = RecipesViewModel(recipeService: service)
@@ -60,15 +62,16 @@ class RecipeCoordinator: Coordinator, RecipeCoordinatorProtocol {
         let listVC = ListCategoryViewController(viewModel: listViewModel)
         
         listViewModel.coordinator = self
-
+        
         // Chama a proxima tela
         navigationController.pushViewController(listVC, animated: false)
     }
     
-    func navigateToRecipeDetail() {
-        let detailVC = RecipeDetailViewController()
+    func navigateToRecipeDetail(recipe: Recipe) {
+        let detailViewModel = RecipeDetailViewModel(recipe: recipe)
+        let detailVC = RecipeDetailViewController(viewModel: detailViewModel)
         navigationController.pushViewController(detailVC, animated: false)
-
-
+        
+        
     }
 }

@@ -10,7 +10,8 @@ import UIKit
 
 // MARK: - Classe responsavel pela requisicao de receitas
 class RecipeService {
-    
+    static let shared = RecipeService()
+
     // MARK: - Configuracao das variaveis
     
     // cria a url base
@@ -21,53 +22,45 @@ class RecipeService {
     // Converte para String.
     // Se não existir, usa string vazia.
     let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String ?? ""
-
+    
     // Cria uma instancia de cache
     let cache = HybridCache<String, ComplexSearchResponse>()
-
+    
     // MARK: - Buscar receitas com base na categoria
     func fetchRecipesByType(type: SectionKind, completion: @escaping (Result<[Recipe], Error>) -> Void) {
         
-        // MARK: - Definindo variaveis utilizadas pela funcao
+        let path = "/complexSearch?apiKey=\(apiKey)&type=\(type.rawQueryValue)&number=50&addRecipeInformation=true&addRecipeInstructions=true  &fillIngredients=true"
         
-        // chave do cache
-        let cacheKey = "recipes_\(type)"
-        
-        // busca receitas armazenadas em cache
-        if let cachedData = cache.get(for: cacheKey) {
-            // Cache precisa ser do tipo correto
-            completion(.success(cachedData.results))
-            return
-        }
-        
-        // caminho da requisicao
-        let path = "/complexSearch?apiKey=\(apiKey)&type=\(type.rawQueryValue)&number=50&addRecipeInformation=true&addRecipeInstructions=true"
-
-        // cria a url com base na url base e o cominho
         guard let url = URL(string: baseURL + path) else {
             completion(.failure(NSError(domain: "InvalidURL", code: 0)))
             return
         }
         
-        // Cria a sessao
+        // Usa a URL como chave — qualquer mudança nos params invalida o cache
+        let cacheKey = "recipes_\(type.rawQueryValue)"
+
+      
+        if let cachedData = cache.get(for: cacheKey) {
+            print("CACHE HIT:", cacheKey)
+            completion(.success(cachedData.results))
+            return
+        }
+        
         URLSession.shared.dataTask(with: url) { data, _, error in
-            // Verifica se retornou algum dado
             guard let data = data else {
                 completion(.failure(NSError(domain: "NoData", code: 1)))
                 return
             }
             
-            // roda na thread principal
             DispatchQueue.main.async {
                 do {
-                    // decodifica a resposta dentro da classe
                     let response = try JSONDecoder().decode(ComplexSearchResponse.self, from: data)
-                    // salva os dados em cache
+                    
                     self.cache.set(ComplexSearchResponse(results: response.results), for: cacheKey)
-                    // retorna sucesso na requisicao
                     completion(.success(response.results))
                     
                 } catch {
+                    print("Erro no decode: \(error)")
                     completion(.failure(error))
                 }
             }

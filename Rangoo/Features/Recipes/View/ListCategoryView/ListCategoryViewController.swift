@@ -73,7 +73,7 @@ extension ListCategoryViewController: UITableViewDelegate {
         let recipe = viewModel.recipes[indexPath.row]
         
         // Chama o coordinator para navegar
-        viewModel.goToRecipeDetail()
+        viewModel.goToRecipeDetail(recipe: recipe)
     }
 }
 

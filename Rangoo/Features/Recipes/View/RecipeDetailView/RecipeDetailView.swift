@@ -23,8 +23,8 @@ class RecipeDetailView: UIView, ViewProtocol {
         table.register(InstructionsTableViewCell.self,
                        forCellReuseIdentifier: InstructionsTableViewCell.identifier)
         
-        table.rowHeight = 60
-        table.contentInsetAdjustmentBehavior = .automatic
+        table.rowHeight = UITableView.automaticDimension
+        table.estimatedRowHeight = 100
         return table
     }()
     
@@ -54,16 +54,13 @@ class RecipeDetailView: UIView, ViewProtocol {
                 self.onSegmentChanged?(index)            default:
                 break
             }
-            
-            self.tableView.reloadData()
         }
     }
     
     func setHierarchy() {
         addSubview(tableView)
     }
-    // RecipeDetailView.swift
-    
+
     private var headerConfigured = false  // flag para configurar só uma vez
     
     
@@ -87,7 +84,9 @@ class RecipeDetailView: UIView, ViewProtocol {
         setupHeader()    }
     
     func setupHeader() {
+        header.setNeedsLayout()
         
+        header.layoutIfNeeded()
         let height = header.systemLayoutSizeFitting(
             CGSize(width: frame.width, height: UIView.layoutFittingCompressedSize.height),
             withHorizontalFittingPriority: .required,
