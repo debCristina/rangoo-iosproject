@@ -36,6 +36,8 @@ class RecipeDetailViewController: UIViewController {
         
         recipeDetailView.tableView.dataSource = self
         recipeDetailView.tableView.contentInsetAdjustmentBehavior = .never
+        
+        recipeDetailView.header.updateTitle(for: selectedSegment)
         recipeDetailView.onSegmentChanged = { [weak self] index in
             guard let self else { return }
             
@@ -43,10 +45,10 @@ class RecipeDetailViewController: UIViewController {
             self.recipeDetailView.header.updateTitle(for: index)
             
             self.recipeDetailView.tableView.reloadData()
-            
+        
         }
         
-        print(viewModel.recipe.analyzedInstructions?.first?.steps ?? "teste")
+        print("Steps count:", viewModel.recipe.analyzedInstructions?.first?.steps.count ?? -1)
         
     }
 }
@@ -57,7 +59,7 @@ extension RecipeDetailViewController: UITableViewDataSource {
         if selectedSegment == 0 {
             return viewModel.recipe.extendedIngredients?.count ?? 0
         } else {
-            return viewModel.recipe.analyzedInstructions?.first?.steps.count ?? 5
+            return viewModel.recipe.analyzedInstructions?.first?.steps.count ?? 0
         }
     }
     
@@ -96,6 +98,7 @@ extension RecipeDetailViewController: UITableViewDataSource {
             if let step = step {
                 cell.configure(step: step)
             }
+
             
             return cell
         }

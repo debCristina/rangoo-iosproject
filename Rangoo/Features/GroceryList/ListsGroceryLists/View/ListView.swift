@@ -8,8 +8,10 @@
 import Foundation
 import UIKit
 
+// MARK: - View responsavel pela configuração da table view de lista de compras
 class ListView: UIView, ViewProtocol {
     
+    // MARK: - Variaveis de configuração
     // Cria a table view
     lazy var groceryListTableView: UITableView = {
         let tableView = UITableView()

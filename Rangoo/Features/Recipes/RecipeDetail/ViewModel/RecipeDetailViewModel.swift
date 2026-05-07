@@ -7,18 +7,22 @@
 
 import Foundation
 
-import Foundation
 
+// MARK: - View model responsavel pelas tramissões de dados
 class RecipeDetailViewModel {
     
+    // MARK: - Variaveis de configuração
+    
+    // Estado que a ui pode assumir
     enum State {
         case ingredients
         case instructions
     }
     
+    // Receita recebida para exibir detalhes
     let recipe: Recipe
-    var state: State = .ingredients
     
+    // MARK: - Método de inicialização
     init(recipe: Recipe) {
         self.recipe = recipe
     }

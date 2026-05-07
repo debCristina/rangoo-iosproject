@@ -51,7 +51,8 @@ class RecipeDetailView: UIView, ViewProtocol {
                 self.onSegmentChanged?(index)
             case 1:
                 print("Instruções")
-                self.onSegmentChanged?(index)            default:
+                self.onSegmentChanged?(index)
+            default:
                 break
             }
         }
@@ -61,7 +62,7 @@ class RecipeDetailView: UIView, ViewProtocol {
         addSubview(tableView)
     }
 
-    private var headerConfigured = false  // flag para configurar só uma vez
+    private var headerConfigured = false
     
     
     private var lastWidth: CGFloat = 0

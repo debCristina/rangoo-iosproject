@@ -8,6 +8,7 @@
 import UIKit
 
 class GroceryListTableViewCell: UITableViewCell, ViewProtocol {
+    // MARK: - Variaveis de configuração
     // Identificador da celula
     static let identifier: String = "GroceryListTableViewCell"
     
@@ -35,6 +36,7 @@ class GroceryListTableViewCell: UITableViewCell, ViewProtocol {
         return label
     }()
     
+    // Imagem da lista
     private lazy var listImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "recipeImage")
@@ -45,6 +47,7 @@ class GroceryListTableViewCell: UITableViewCell, ViewProtocol {
         return imageView
     }()
     
+    // Stack vertical que agrupa o nome da lista e o numero de itens
     private lazy var stackVertical: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [listName, listNumberItens])
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -54,6 +57,7 @@ class GroceryListTableViewCell: UITableViewCell, ViewProtocol {
         return stack
     }()
     
+    // Stack horizontal que agrupa a imagem e a stack vertical
     private lazy var stackHorizontal: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [listImage, stackVertical])
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -70,6 +74,7 @@ class GroceryListTableViewCell: UITableViewCell, ViewProtocol {
         return stackView
     }()
     
+    // MARK: - Método de inicialização
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
@@ -80,24 +85,24 @@ class GroceryListTableViewCell: UITableViewCell, ViewProtocol {
         setupView()
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
+    // MARK: - Seleciona o item
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
     }
     
+    // MARK: - Seta a view
     func setupView() {
         setHierarchy()
         setConstraints()
     }
     
+    // MARK: - Organiza a hierarquia da view
     func setHierarchy() {
         contentView.addSubview(stackHorizontal)
     }
     
+    // MARK: - Adiciona constraints
     func setConstraints() {
         NSLayoutConstraint.activate([
             stackHorizontal.topAnchor.constraint(equalTo: contentView.topAnchor),

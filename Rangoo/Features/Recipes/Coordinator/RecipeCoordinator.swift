@@ -11,7 +11,6 @@ import UIKit
 // MARK: - Recipe Coordinator: Responsável pelos fluxos de receita
 class RecipeCoordinator: Coordinator, RecipeCoordinatorProtocol {
     
-    
     // MARK: - Coniguração de variáveis
     // Configuracao da tab item
     private let tabItem: TabItem
@@ -36,7 +35,6 @@ class RecipeCoordinator: Coordinator, RecipeCoordinatorProtocol {
         navigationController.tabBarItem = tabItem.makeTabBarItem()
         // Chama a primeira tela
         navigateToRecipes()
-        
     }
     
     // MARK: - Função de navegar para a tela de receita
@@ -56,22 +54,27 @@ class RecipeCoordinator: Coordinator, RecipeCoordinatorProtocol {
     
     // MARK: - Função de navegar para a tela que lista receitas por uma categoria
     func navigateToRecipeList(category: SectionKind, recipes: [Recipe]) {
-        // Cria o ViewController
+        // Cria a ViewModel
         let listViewModel = RecipeByCategoryViewModel(category: category, recipes: recipes)
         
+        // Cria a ViewCAontroller
         let listVC = ListCategoryViewController(viewModel: listViewModel)
         
+        // Define o coordinator pai como recipeCoordinator
         listViewModel.coordinator = self
         
         // Chama a proxima tela
         navigationController.pushViewController(listVC, animated: false)
     }
     
+    // MARK: - Função responsavel por exibir a tela de detalhes da receita
     func navigateToRecipeDetail(recipe: Recipe) {
+        // Define a view model
         let detailViewModel = RecipeDetailViewModel(recipe: recipe)
+        // Define a view controller
         let detailVC = RecipeDetailViewController(viewModel: detailViewModel)
+        
+        // Chama a tels de detalhes
         navigationController.pushViewController(detailVC, animated: false)
-        
-        
     }
 }

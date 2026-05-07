@@ -7,7 +7,10 @@
 
 import UIKit
 
+// MARK: - View Controller responsavel pela tranmissão de dados para a ui e captura de interações
 class ListViewController: UIViewController {
+    // MARK: - Variaveis de configuração
+    // View com a table
     private let groceryListView = ListView()
     
     // View model responsavel por transmitir os dados
@@ -24,6 +27,7 @@ class ListViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Define ações a serem executadas quando a tela carregar
     override func viewDidLoad() {
         view.backgroundColor = UIColor.systemBlue
         setupNavigation()
@@ -34,7 +38,7 @@ class ListViewController: UIViewController {
 
     }
     
-    
+    // MARK: - Confugura a navegação
     private func setupNavigation() {
         // Define o título da navegação
         title = "Grocery list"
@@ -48,17 +52,13 @@ class ListViewController: UIViewController {
         // Adiciona os atributos como cor e fonte do titulo
         navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.black, .font: font]
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(   barButtonSystemItem: .add,
-                                                               
-                                                               target: self,
-                                                               
-                                                               action: #selector(didTapAdd)
-                                                               
+        navigationItem.rightBarButtonItem = UIBarButtonItem(   barButtonSystemItem: .add, target: self, action: #selector(didTapAdd)
         )
         
 
     }
     
+    // MARK: - Açã do botão da toolbar
     @objc private func didTapAdd() {
         
         print("Adicionar item")
@@ -66,11 +66,14 @@ class ListViewController: UIViewController {
     }
 }
 
+// MARK: - DataSource
 extension ListViewController: UITableViewDataSource {
+    // MARK: - Função que define o número de linhas da lista
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 5
     }
     
+    // MARK: - Função que define os dados a serem exibidos na célula
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(
@@ -82,13 +85,18 @@ extension ListViewController: UITableViewDataSource {
         
         return cell
     }
-    
-    
 }
 
+// MARK: - Delegate
 extension ListViewController: UITableViewDelegate {
-    // MARK: - Função responsável por implementar swipe actions da direita pra esquerda
+    // MARK: - Detecta clique na celula
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        // Chama o coordinator para navegar
+        viewModel.goToListDetailView()
+    }
+    
+    // MARK: - Função responsável por implementar swipe actions da direita pra esquerda
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         // Definindo a primeira ação como uma ação destrutiva de deleção
         let delete = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, completion in

@@ -7,20 +7,26 @@
 
 import UIKit
 
+// MARK: - Table view de ingredientes
 class IngredientsTableViewCell: UITableViewCell, ViewProtocol {
+    // MARK: - Variaveis de configuração
     
+    // Identificador da celula
     static let identifier: String = "IngredientsTableViewCell"
     
+    // Titulo do ingrediente
     private lazy var ingedientTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.black
         label.font = UIFont.customFont(type: .regular, size: 14)
         label.numberOfLines = 0
-
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
     
+    // Quantidade do ingrediente
     private lazy var ingredientQuantity: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -29,20 +35,17 @@ class IngredientsTableViewCell: UITableViewCell, ViewProtocol {
         return label
     }()
     
+    // Stack Horizontal para agrupar titulo e quantidade
     private lazy var stackView: UIStackView = {
-        lazy var stackView = UIStackView(arrangedSubviews: [ingedientTitle, ingredientQuantity])
+        let stackView = UIStackView(arrangedSubviews: [ingedientTitle, ingredientQuantity])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 16,
-                                                                     leading: 16,
-                                                                     bottom: 16,
-                                                                     trailing: 16)
         stackView.spacing = 15
         
         return stackView
     }()
     
+    // MARK: - Função de inicialização
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
@@ -52,13 +55,11 @@ class IngredientsTableViewCell: UITableViewCell, ViewProtocol {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
+    // MARK: - Seleciona o item da lista
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
+    
     
     func configure(name: String, quantity: String) {
         ingedientTitle.text = name

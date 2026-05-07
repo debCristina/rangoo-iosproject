@@ -23,6 +23,7 @@ class RecipeByCategoryViewModel {
         self.recipes = recipes
     }
     
+    // MARK: - Comuica o coordinator para exibir a tela de detalhes da receita
     func goToRecipeDetail(recipe: Recipe) {
         coordinator?.navigateToRecipeDetail(recipe: recipe)
     }

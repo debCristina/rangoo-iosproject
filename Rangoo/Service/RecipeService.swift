@@ -29,8 +29,10 @@ class RecipeService {
     // MARK: - Buscar receitas com base na categoria
     func fetchRecipesByType(type: SectionKind, completion: @escaping (Result<[Recipe], Error>) -> Void) {
         
-        let path = "/complexSearch?apiKey=\(apiKey)&type=\(type.rawQueryValue)&number=50&addRecipeInformation=true&addRecipeInstructions=true  &fillIngredients=true"
+        // Caminho da requisição
+        let path = "/complexSearch?apiKey=\(apiKey)&type=\(type.rawQueryValue)&number=50&addRecipeInformation=true&addRecipeInstructions=true&fillIngredients=true"
         
+        // URL Completa
         guard let url = URL(string: baseURL + path) else {
             completion(.failure(NSError(domain: "InvalidURL", code: 0)))
             return
@@ -39,24 +41,29 @@ class RecipeService {
         // Usa a URL como chave — qualquer mudança nos params invalida o cache
         let cacheKey = "recipes_\(type.rawQueryValue)"
 
-      
+        // Pega os dados em cache
         if let cachedData = cache.get(for: cacheKey) {
             print("CACHE HIT:", cacheKey)
             completion(.success(cachedData.results))
             return
         }
         
+        // Cria a sessão
         URLSession.shared.dataTask(with: url) { data, _, error in
             guard let data = data else {
                 completion(.failure(NSError(domain: "NoData", code: 1)))
                 return
             }
             
+            // Decodificar os dados
             DispatchQueue.main.async {
                 do {
+                    // Decodifica os dados na model
                     let response = try JSONDecoder().decode(ComplexSearchResponse.self, from: data)
                     
+                    // salva dados em cache
                     self.cache.set(ComplexSearchResponse(results: response.results), for: cacheKey)
+                    // completa a decodificação
                     completion(.success(response.results))
                     
                 } catch {

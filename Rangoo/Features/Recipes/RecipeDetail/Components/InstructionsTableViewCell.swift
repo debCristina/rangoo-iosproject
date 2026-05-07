@@ -22,6 +22,7 @@ class InstructionsTableViewCell: UITableViewCell {
         return label
     }()
     
+  
     
     private lazy var stackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [

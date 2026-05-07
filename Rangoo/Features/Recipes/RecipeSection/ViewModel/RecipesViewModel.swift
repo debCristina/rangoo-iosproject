@@ -32,22 +32,28 @@ class RecipesViewModel {
         self.service = recipeService
     }
     
+    // MARK: - Comunica o coordinator para ir para a tela de lista por categoria
     func goToList(category: SectionKind) {
         let recipes = recipesByCategory[category] ?? []
         coordinator?.navigateToRecipeList(category: category, recipes: recipes)
     }
-    
+    // MARK: - Comunica o coordinator para ir para o detalhe da receita selecionada
     func goToRecipeDetail(recipe: Recipe) {
         coordinator?.navigateToRecipeDetail(recipe: recipe)
     }
     // MARK: - Buscando receitas utilizando o método da service
     func fetchRecipes() {
+        
+        // Cria um grupo para executar tarefas
         let group = DispatchGroup()
         
         for kind in SectionKind.allCases {
+            // Avisa quando uma terefa começou
             group.enter()
             
+            // Execução da tarefa de forma assíncrona
             service.fetchRecipesByType(type: kind) { [weak self] result in
+                // finaliza a tarefa ao final independente de caso de sucesso ou falha
                 defer { group.leave() }
                 
                 switch result {
@@ -74,56 +80,6 @@ class RecipesViewModel {
             return RecipeSection(section: kind, recipes: recipes)
         }
     }
-    
-//    // MARK: - Filtrar receita pelo tipo de sessão esperado
-//    func filterRecipes(for section: SectionKind) -> [Recipe] {
-//        switch section {
-//            // Caso almoco procura todas as receitas onde dishTypes contenha lunch
-//        case .lunch:
-//            return recipes.filter {
-//                $0.dishTypes?.contains("lunch") == true
-//            }
-//            // Caso dinner procura todas as receitas onde dishTypes contenha dinner
-//        case .dinner:
-//            return recipes.filter {
-//                $0.dishTypes?.contains("dinner") == true
-//            }
-//            // Caso main dish procura todas as receitas onde dishTypes contenha main dish
-//        case .breakFast:
-//            return recipes.filter {
-//                $0.dishTypes?.contains("breakfast") == true
-//            }
-//        case .salads:
-//            return recipes.filter {
-//                $0.dishTypes?.contains("salad") == true
-//            }
-//        case .sideDishes:
-//            return recipes.filter {
-//                $0.dishTypes?.contains("side dish") == true
-//            }
-//        case .soups:
-//            return recipes.filter {
-//                $0.dishTypes?.contains("soup") == true
-//            }
-//            
-//        case .mainDish:
-//            return recipes.filter {
-//                $0.dishTypes?.contains("main dish") == true
-//            }
-//        case .snack:
-//            return recipes.filter {
-//                $0.dishTypes?.contains("snack") == true
-//            }
-//        case .dessert:
-//            return recipes.filter {
-//                $0.dishTypes?.contains("dessert") == true
-//            }
-//        case .appetizer:
-//            return recipes.filter {
-//                $0.dishTypes?.contains("appetizer") == true
-//            }
-//        }
-//    }
 }
 
 

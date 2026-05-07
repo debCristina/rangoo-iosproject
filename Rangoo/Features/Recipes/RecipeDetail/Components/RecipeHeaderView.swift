@@ -51,8 +51,31 @@ class RecipeHeaderView: UIView, ViewProtocol {
         
     }()
     
+    private lazy var sectionQuantityTitle: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor.black
+        label.font = UIFont.customFont(type: .bold, size: 18)
+        label.numberOfLines = 1
+        label.text = "Medida"
+        return label
+        
+    }()
+    
+    private lazy var stackViewSection: UIStackView = {
+      lazy var stack = UIStackView(arrangedSubviews: [sectionTitle, sectionQuantityTitle])
+        stack.axis = .horizontal
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.alignment = .fill
+        stack.distribution = .fill
+        return stack
+    }()
+    
     func updateTitle(for index: Int) {
+        let isIngredients = index == 0
         sectionTitle.text = index == 0 ? "Ingredientes" : "Instruções"
+        
+        sectionQuantityTitle.isHidden = !isIngredients
     }
     
     // MARK: - variavel de controle de estado
@@ -133,6 +156,7 @@ class RecipeHeaderView: UIView, ViewProtocol {
         addSubview(segmentedControl)
         addSubview(stackViewHorizontal)
         addSubview(sectionTitle)
+        addSubview(stackViewSection)
     }
     
     
@@ -185,11 +209,11 @@ class RecipeHeaderView: UIView, ViewProtocol {
         ])
         
         NSLayoutConstraint.activate([
-            sectionTitle.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 20),
-            sectionTitle.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            sectionTitle.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            sectionTitle.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
-            sectionTitle.heightAnchor.constraint(greaterThanOrEqualToConstant: 18)
+            stackViewSection.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 20),
+            stackViewSection.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            stackViewSection.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            stackViewSection.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            stackViewSection.heightAnchor.constraint(greaterThanOrEqualToConstant: 18)
         ])
     }
 }

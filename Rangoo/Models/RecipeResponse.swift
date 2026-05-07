@@ -61,7 +61,7 @@ struct Recipe: Codable {
         }
     }
 }
-
+// MARK: - Ingredientes da receita
 struct Ingredient: Codable {
     let id: Int?
     let name: String
