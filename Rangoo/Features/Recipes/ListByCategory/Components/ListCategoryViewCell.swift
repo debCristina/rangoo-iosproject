@@ -120,6 +120,12 @@ class ListCategoryViewCell: UITableViewCell, ViewProtocol {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        recipeImage.image = nil
+    }
+    
     // MARK: - Configura o titulo, descricao e tempo da receita com os dados vindos da api
     func configure(with recipe: Recipe) {
         

@@ -31,11 +31,16 @@ class ListViewController: UIViewController {
     override func viewDidLoad() {
         view.backgroundColor = UIColor.systemBlue
         setupNavigation()
+        refreshList()
         view.backgroundColor = .white
         view = groceryListView
         groceryListView.groceryListTableView.dataSource = self
         groceryListView.groceryListTableView.delegate = self
-
+        
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refreshList()
     }
     
     // MARK: - Confugura a navegação
@@ -52,17 +57,31 @@ class ListViewController: UIViewController {
         // Adiciona os atributos como cor e fonte do titulo
         navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.black, .font: font]
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(   barButtonSystemItem: .add, target: self, action: #selector(didTapAdd)
-        )
-        
-
+        navigationItem.rightBarButtonItem = UIBarButtonItem(   barButtonSystemItem: .add, target: self, action: #selector(didTapAdd))
+    }
+    
+    func refreshList() {
+        loadData()
+    }
+    
+    private func loadData() {
+        do {
+            try viewModel.loadData()
+            groceryListView.groceryListTableView.reloadData()
+        } catch {
+            print("Erro ao carregar listas: \(error)")
+        }
     }
     
     // MARK: - Açã do botão da toolbar
     @objc private func didTapAdd() {
-        
-        print("Adicionar item")
-        
+        //        do {
+        //            try viewModel.addList(name: "teste", image: nil)
+        //            groceryListView.groceryListTableView.reloadData()
+        viewModel.presenteAddModal()
+        //        } catch {
+        //            print("Erro ao adicionar lista: \(error)")
+        //        }
     }
 }
 
@@ -70,18 +89,20 @@ class ListViewController: UIViewController {
 extension ListViewController: UITableViewDataSource {
     // MARK: - Função que define o número de linhas da lista
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return viewModel.allLists.count
+        
     }
     
-    // MARK: - Função que define os dados a serem exibidos na célula
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: GroceryListTableViewCell.identifier,
             for: indexPath
         ) as? GroceryListTableViewCell else {
             return UITableViewCell()
         }
+        
+        let list = viewModel.allLists[indexPath.row]
+        cell.configure(with: list)
         
         return cell
     }
@@ -92,8 +113,11 @@ extension ListViewController: UITableViewDelegate {
     // MARK: - Detecta clique na celula
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        let list = viewModel.allLists[indexPath.row]
+        
+        
         // Chama o coordinator para navegar
-        viewModel.goToListDetailView()
+        viewModel.goToListDetailView(list: list)
     }
     
     // MARK: - Função responsável por implementar swipe actions da direita pra esquerda
@@ -101,11 +125,18 @@ extension ListViewController: UITableViewDelegate {
         // Definindo a primeira ação como uma ação destrutiva de deleção
         let delete = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, completion in
             
-            // chama a função da view model
-            self?.viewModel.deleteList()
-            
-            // completa a ação
-            completion(true)
+            do {
+                // chama a função da view model
+                guard let list = self?.viewModel.allLists[indexPath.row] else { return }
+                try self?.viewModel.deleteList(list: list)
+                self?.groceryListView.groceryListTableView.reloadData()
+                completion(true)
+                
+            } catch {
+                print("Erro ao deletar: \(error)")
+                // completa a ação
+                completion(false)
+            }
         }
         
         // Define o ícone do botão
@@ -116,10 +147,13 @@ extension ListViewController: UITableViewDelegate {
         // Define a segunda ação como uma ação normal de edição
         let edit = UIContextualAction(style: .normal, title: "Edit") { [weak self] _, _, completion in
             
-            // chama o método da view model de edição
-            self?.viewModel.editList()
+            guard let list = self?.viewModel.allLists[indexPath.row] else {
+                completion(false)
+                return
+            }
             
-            // completa a ação
+            self?.viewModel.presentEditModal(list: list)
+            
             completion(true)
             
         }
@@ -134,7 +168,7 @@ extension ListViewController: UITableViewDelegate {
         let config = UISwipeActionsConfiguration(actions: [delete, edit])
         // manter os botões visíveis quando não tiver swipe
         config.performsFirstActionWithFullSwipe = false
-
+        
         // retorna a configuração
         return config
     }

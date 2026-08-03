@@ -37,10 +37,12 @@ class RecipesViewModel {
         let recipes = recipesByCategory[category] ?? []
         coordinator?.navigateToRecipeList(category: category, recipes: recipes)
     }
+    
     // MARK: - Comunica o coordinator para ir para o detalhe da receita selecionada
     func goToRecipeDetail(recipe: Recipe) {
         coordinator?.navigateToRecipeDetail(recipe: recipe)
     }
+    
     // MARK: - Buscando receitas utilizando o método da service
     func fetchRecipes() {
         

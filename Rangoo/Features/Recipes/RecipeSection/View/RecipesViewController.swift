@@ -55,7 +55,7 @@ class RecipesViewController: UIViewController {
         recipeView.recipeCategoryView.recipesCollectionView.dataSource = self
         
         recipeView.recipeCategoryView.recipesCollectionView.delegate = self
-//        homeView.recipeCategoryView.recipesCollectionView.delegate = self
+        //homeView.recipeCategoryView.recipesCollectionView.delegate = self
         
         // Bind com a view model
         bindViewModel()
@@ -124,10 +124,6 @@ extension RecipesViewController: UICollectionViewDataSource {
         
         cell.configure(with: recipe)
         
-        
-        // Neste ponto, a célula já existe (nova ou reutilizada), mas ainda NÃO está configurada com dados específicos.
-        // Normalmente aqui chamaria um método como configure(...) para preencher labels, imagens e estados visuais da célula.
-        // Retorna a célula para que a collection view possa posicioná-la e exibi-la na tela no indexPath informado.
         return cell
     }
     

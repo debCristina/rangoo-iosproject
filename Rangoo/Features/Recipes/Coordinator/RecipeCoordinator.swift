@@ -78,3 +78,5 @@ class RecipeCoordinator: Coordinator, RecipeCoordinatorProtocol {
         navigationController.pushViewController(detailVC, animated: false)
     }
 }
+
+

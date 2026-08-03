@@ -19,7 +19,6 @@ class GroceryListTableViewCell: UITableViewCell, ViewProtocol {
         label.textColor = UIColor.fontColor
         label.font = UIFont.customFont(type: .medium, size: 18)
         label.numberOfLines = 1
-        label.text = "Mercado"
         label.lineBreakMode = .byTruncatingTail
         return label
     }()
@@ -32,14 +31,12 @@ class GroceryListTableViewCell: UITableViewCell, ViewProtocol {
         label.font = UIFont.customFont(type: .regular, size: 14)
         label.numberOfLines = 1
         label.lineBreakMode = .byTruncatingTail
-        label.text = "50 itens"
         return label
     }()
     
     // Imagem da lista
     private lazy var listImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "recipeImage")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 30
@@ -83,6 +80,20 @@ class GroceryListTableViewCell: UITableViewCell, ViewProtocol {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()
+    }
+    
+    // MARK: - Configura a célula com os dados da lista
+    func configure(with list: GroceryList) {
+        listName.text = list.name
+        
+        let itemCount = (list.items as? Set<ListItem>)?.count ?? 0
+        listNumberItens.text = "\(itemCount) itens"
+        
+        if let imageData = list.image, let image = UIImage(data: imageData) {
+            listImage.image = image
+        } else {
+            listImage.image = UIImage(named: "recipeImage")
+        }
     }
     
     // MARK: - Seleciona o item

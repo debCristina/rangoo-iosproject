@@ -26,6 +26,7 @@ class GroceryListDetailView: UIView, ViewProtocol {
         
         table.rowHeight = UITableView.automaticDimension
         table.estimatedRowHeight = 120
+        table.showsVerticalScrollIndicator = false
         return table
         
     }()

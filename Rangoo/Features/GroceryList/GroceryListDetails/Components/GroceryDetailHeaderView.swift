@@ -15,7 +15,7 @@ class GroceryDetailHeaderView: UIView, ViewProtocol {
     
     // Identificador do header
     static let identifier: String = "GreceryHeaderView"
-
+    
     
     // titulo do total
     private lazy var totalAmountTitle: UILabel = {
@@ -23,8 +23,8 @@ class GroceryDetailHeaderView: UIView, ViewProtocol {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.white
         label.font = UIFont.customFont(type: .semiBold, size: 20)
-        label.text = "Total da lista:"
-
+        label.text = "Total amount:"
+        
         return label
     }()
     
@@ -34,7 +34,6 @@ class GroceryDetailHeaderView: UIView, ViewProtocol {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.white
         label.font = UIFont.customFont(type: .regular, size: 18)
-        label.text = "5 itens"
         return label
     }()
     
@@ -44,7 +43,6 @@ class GroceryDetailHeaderView: UIView, ViewProtocol {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.white
         label.font = UIFont.customFont(type: .bold, size: 40)
-        label.text = "65"
         
         return label
     }()
@@ -99,6 +97,12 @@ class GroceryDetailHeaderView: UIView, ViewProtocol {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Configura a célula com os dados da lista
+    func configure(with list: GroceryList, total: Double) {
+        totalAmountValue.text = String(format: "%.2f", total)
+        totalItems.text = "\(list.items?.count ?? 0) items"
+    }
+    
     // MARK: - Configura a view
     func setupView() {
         setHierarchy()
@@ -113,10 +117,9 @@ class GroceryDetailHeaderView: UIView, ViewProtocol {
     // MARK: - Adiciona constraints
     func setConstraints() {
         NSLayoutConstraint.activate([
-            stackHorizontal.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            stackHorizontal.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             stackHorizontal.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackHorizontal.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackHorizontal.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 16),
+            stackHorizontal.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 }
