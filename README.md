@@ -14,7 +14,6 @@ Built with UIKit + ViewCode, following the MVVM-C architecture 💫
 
 ![Platform](https://img.shields.io/badge/platform-iOS-lightgrey?style=flat-square)
 ![Architecture](https://img.shields.io/badge/architecture-MVVM--C-blueviolet?style=flat-square)
-![Status](https://img.shields.io/badge/status-in%20development-yellow?style=flat-square)
 
 </div>
 
@@ -176,7 +175,7 @@ This project was built to deepen my knowledge of iOS development with UIKit, app
 
 **Débora Cristina Silva Ferreira**
 
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/yourusername)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/yourprofile)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/debCristina)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/debora-ferreiradev/)
 
 </div>
