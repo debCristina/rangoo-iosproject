@@ -6,14 +6,14 @@
 //
 import Foundation
 
-//Struct que guarda quando o dado foi salvo no cache e o dado que deve ser armazenado
+// MARK: - Struct que guarda quando o dado foi salvo no cache e o dado que deve ser armazenado
 // Permite codificar e decodificar o objeto em JSON para salvar no disco.
 struct CachedData<T: Codable>: Codable {
     let timestamp: Date
     let data: T
 }
 
-//Envolve qualquer valor T para que possa ser armazenado no NSCache.
+// MARK: - Envolve qualquer valor T para que possa ser armazenado no NSCache.
 //Transforma qualquer valor em um objeto de classe que NSCache consegue armazenar.
 final class CacheBox <T> {
     let value: T
@@ -23,12 +23,12 @@ final class CacheBox <T> {
     }
 }
 
-// Um wrapper genérico que permite usar qualquer tipo como chave
+// MARK: - Um wrapper genérico que permite usar qualquer tipo como chave
 final class MemoryCache<Key: Hashable, Value> {
     // Cria um cache genérico na memoria
     private let cache = NSCache<WrappedKey, CacheBox<Value> > ()
     
-    // Cria um WrappedKey para a chave → permite NSCache aceitar qualquer Hashable.
+    // MARK: - Cria um WrappedKey para a chave → permite NSCache aceitar qualquer Hashable.
     // Cria um CacheBox para o valor, permite NSCache aceitar structs.
     // Salva no cache de memória.
     func set(_ value: Value, for key: Key) {
@@ -36,7 +36,7 @@ final class MemoryCache<Key: Hashable, Value> {
         cache.setObject(CacheBox(value: value), forKey: wrappedKey)
     }
     
-    // Cria WrappedKey com a chave fornecida.
+    // MARK: - Cria WrappedKey com a chave fornecida.
     // Busca no NSCache.
     // Retorna o valor dentro do CacheBox (ou nil se não existir).
     func get(for key: Key) -> Value? {
@@ -44,14 +44,14 @@ final class MemoryCache<Key: Hashable, Value> {
         return cache.object(forKey: wrappedKey)?.value
     }
     
-    //Remove um item específico do cache de memória.
+    // MARK: - Remove um item específico do cache de memória.
     // Mantém o cache limpo, evita que dados antigos fiquem ocupando memória.
     func remove(for key: Key) {
         cache.removeObject(forKey: WrappedKey(key))
     }
 }
 
-// Permite usar qualquer tipo Hashable como chave em NSCache (que precisa de NSObject).
+// MARK: - Permite usar qualquer tipo Hashable como chave em NSCache (que precisa de NSObject).
 final  class  WrappedKey : NSObject {
     
     //Armazena a chave original
@@ -67,7 +67,7 @@ final  class  WrappedKey : NSObject {
     // Retorna o hash da chave original (key.hashValue).
     override  var hash: Int { key.hashValue }
     
-    //NSCache também precisa saber quando duas chaves são iguais, não apenas o hash.
+    // MARK: - NSCache também precisa saber quando duas chaves são iguais, não apenas o hash.
     override func isEqual(_ object: Any?) -> Bool {
         //Verifica se o outro objeto é do mesmo tipo.
         // Se não for, retorna false → não são iguais
@@ -78,13 +78,14 @@ final  class  WrappedKey : NSObject {
     }
 }
 
-// Funcao para salvar dados no disco
+// MARK: - Funcao para salvar dados no disco
 final class DiskCache<Value: Codable> {
     
     //armazena a URL da pasta no disco onde os dados serão salvos.
     private let directory: URL
     
 
+    // MARK: - Inicia a classe
     init (folderName: String) {
         //Garante que a pasta existe se não, cria.
         let baseURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
@@ -96,7 +97,7 @@ final class DiskCache<Value: Codable> {
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
     }
     
-    // salva um valor no disco.
+    // MARK: - salva um valor no disco.
     func set(_ value: Value, for key: String) {
         //cria o caminho completo para o arquivo
         let url = directory.appendingPathComponent(key)
@@ -106,7 +107,7 @@ final class DiskCache<Value: Codable> {
         try? data?.write(to: url)
     }
     
-    //recupera um valor do disco.
+    // MARK: - Recupera um valor do disco.
     func get(for key: String) -> Value? {
         
         //cria o caminho do arquivo a ser lido.
@@ -123,8 +124,9 @@ final class DiskCache<Value: Codable> {
 
 }
 
-//Cache híbrido: combina memória (rápida) e disco (persistente).
+// MARK: - Cache híbrido: combina memória (rápida) e disco (persistente).
 final class HybridCache<Key: Hashable, Value: Codable> {
+    // MARK: - Definicao de variaveis
     //cache em memória usando MemoryCache.
     private let memoryCache = MemoryCache<Key, CachedData<Value>>()
     
@@ -134,6 +136,7 @@ final class HybridCache<Key: Hashable, Value: Codable> {
     //empo de vida do cache, aqui definido como 3600 segundos (1 hora).
     private let ttl: TimeInterval = 3600
     
+    // MARK: - Adiciona o dado
     func set(_ value: Value, for key: Key) {
         //encapsula o dado com o timestamp atual.
         let cached = CachedData(timestamp: Date(), data: value)
@@ -143,6 +146,7 @@ final class HybridCache<Key: Hashable, Value: Codable> {
         diskCache.set(cached, for: "\(key)")
     }
     
+    // MARK: - Funcao que pega o dado salvo
     func get(for key: Key) -> Value? {
        // tenta buscar na memória.
         if let cached = memoryCache.get(for: key),

@@ -8,52 +8,66 @@
 import Foundation
 import UIKit
 
+// MARK: - Classe responsavel pela requisicao de receitas
 class RecipeService {
+    static let shared = RecipeService()
+
+    // MARK: - Configuracao das variaveis
+    
+    // cria a url base
     let baseURL = "https://api.spoonacular.com/recipes"
     
-    //   Bundle.main significa o bundle principal do app, ou seja, o que está empacotado junto com o app.
+    //  Bundle.main significa o bundle principal do app, ou seja, o que está empacotado junto com o app.
     //O método object(forInfoDictionaryKey:) pega um valor do Info.plist do app usando a chave fornecida.
     // Converte para String.
     // Se não existir, usa string vazia.
     let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String ?? ""
-
-    let cache = HybridCache<String, RecipeResponse>()
     
-
+    // Cria uma instancia de cache
+    let cache = HybridCache<String, ComplexSearchResponse>()
+    
+    // MARK: - Buscar receitas com base na categoria
     func fetchRecipesByType(type: SectionKind, completion: @escaping (Result<[Recipe], Error>) -> Void) {
-        let cacheKey = "recipes_\(type)"
         
-        if let cachedData = cache.get(for: cacheKey) {
-            // Cache precisa ser do tipo correto
-            completion(.success(cachedData.recipes))
-            print(cachedData.recipes)
-
-            return
-        }
+        // Caminho da requisição
+        let path = "/complexSearch?apiKey=\(apiKey)&type=\(type.rawQueryValue)&number=50&addRecipeInformation=true&addRecipeInstructions=true&fillIngredients=true"
         
-        // addRecipeInformation=true garante que dishTypes venha preenchido
-        let path = "/complexSearch?apiKey=\(apiKey)&type=\(type.rawQueryValue)&number=50&addRecipeInformation=true&addRecipeInstructions=true"
-
+        // URL Completa
         guard let url = URL(string: baseURL + path) else {
             completion(.failure(NSError(domain: "InvalidURL", code: 0)))
             return
         }
         
+        // Usa a URL como chave — qualquer mudança nos params invalida o cache
+        let cacheKey = "recipes_\(type.rawQueryValue)"
+
+        // Pega os dados em cache
+        if let cachedData = cache.get(for: cacheKey) {
+            print("CACHE HIT:", cacheKey)
+            completion(.success(cachedData.results))
+            return
+        }
+        
+        // Cria a sessão
         URLSession.shared.dataTask(with: url) { data, _, error in
             guard let data = data else {
                 completion(.failure(NSError(domain: "NoData", code: 1)))
                 return
             }
             
+            // Decodificar os dados
             DispatchQueue.main.async {
                 do {
-                    // Usa o ComplexSearchResponse correto
+                    // Decodifica os dados na model
                     let response = try JSONDecoder().decode(ComplexSearchResponse.self, from: data)
-                    print(response)
-                    self.cache.set(RecipeResponse(recipes: response.results), for: cacheKey)
+                    
+                    // salva dados em cache
+                    self.cache.set(ComplexSearchResponse(results: response.results), for: cacheKey)
+                    // completa a decodificação
                     completion(.success(response.results))
                     
                 } catch {
+                    print("Erro no decode: \(error)")
                     completion(.failure(error))
                 }
             }

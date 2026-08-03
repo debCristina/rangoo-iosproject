@@ -8,10 +8,14 @@
 import Foundation
 import UIKit
 
+// MARK: - Extensao de cor
 extension UIColor {
+    // cor primeira
     static let primaryColor = UIColor(named: "AccentColor")
 //    static let contrastColor = UIColor(named: "contrastColor")
     static let graySoft = UIColor(named: "softGray")
+    
+    // cor de fonte
     static let fontColor = UIColor.black
 
 }
